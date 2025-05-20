@@ -84,7 +84,7 @@ CREATE TABLE Reviews (
 ## 2. Sample Data Insertion 📊
 Below is sample data for each table.
 Note: ```password_hash``` values are placeholders. In a real application, use a strong hashing algorithm like bcrypt.
-```
+```sql
 -- Users
 INSERT INTO Users (username, email, password_hash, role) VALUES
 ('john_doe', 'john.doe@example.com', 'hashed_password1_placeholder', 'customer'),
@@ -155,7 +155,7 @@ This section provides SQL queries for various operations as required, along with
 
 ### Basic Retrieval Queries
 - Retrieve the list of all products in a specific category (e.g., 'Electronics').
-```
+```sql
 SELECT product_id, product_name, price, stock_quantity
 FROM Products
 WHERE category = 'Electronics';
@@ -163,7 +163,7 @@ WHERE category = 'Electronics';
 Explanation: This query selects key product details (```product_id, product_name, price, stock_quantity```) from the Products table. It filters the results to include only those products where the category column matches 'Electronics'.
 
 - Retrieve the details of a specific user by providing their user_id (e.g., ```user_id = 1```).
-```
+```sql
 SELECT user_id, username, email, role, created_at
 FROM Users
 WHERE user_id = 1;
@@ -171,7 +171,7 @@ WHERE user_id = 1;
 Explanation: This query fetches all relevant information (```user_id, username, email, role, created_at```) for a single user from the Users table. The WHERE clause filters the results to the user whose ```user_id``` is 1.
 
 - Retrieve the order history for a particular user (e.g., ```user_id = 1```).
-```
+```sql
 SELECT order_id, order_date, total_amount, order_status
 FROM Orders
 WHERE user_id = 1
@@ -180,7 +180,7 @@ ORDER BY order_date DESC;
 Explanation: This query lists all orders (```order_id, order_date, total_amount, order_status```) placed by a specific user, identified by user_id = 1. The results are sorted by order_date in descending order, showing the most recent orders first.
 
 - Retrieve the products in an order along with their quantities and prices (e.g., for ```order_id = 1```).
-```
+```sql
 SELECT p.product_name, od.quantity, od.unit_price, (od.quantity * od.unit_price) AS item_total
 FROM OrderDetails od
 JOIN Products p ON od.product_id = p.product_id
@@ -189,7 +189,7 @@ WHERE od.order_id = 1; -- Use an actual order_id from your sample data
 Explanation: This query joins the OrderDetails table (aliased as od) with the Products table (aliased as p) using the ```product_id```. It retrieves the product name, quantity ordered, unit price at the time of order, and calculates the total for each item line (```item_total```). The ```WHERE``` clause filters these details for a specific order_id.
 
 - Retrieve the average rating of a product (e.g., ```product_id = 1```).
-```
+```sql
 SELECT AVG(rating) AS average_rating
 FROM Reviews
 WHERE product_id = 1;
@@ -197,7 +197,7 @@ WHERE product_id = 1;
 Explanation: This query calculates the average rating for a specific product (```where product_id = 1```) by using the ```AVG()``` aggregate function on the rating column in the Reviews table.
 
 - Retrieve the total revenue for a given month (e.g., current month of the current year).
-```
+```sql
 SELECT SUM(p.amount) AS total_revenue
 FROM Payments p
 -- JOIN Orders o ON p.order_id = o.order_id -- Optional join if order details needed for filtering
@@ -209,7 +209,7 @@ Explanation: This query calculates the total revenue by summing the amount from 
 
 ### Data Modification Queries
 - Add a new product to the inventory.
-``` 
+```sql
 INSERT INTO Products (product_name, category, price, stock_quantity, description)
 VALUES ('Gaming Keyboard RGB', 'Electronics', 89.99, 150, 'Mechanical gaming keyboard with customizable RGB lighting.');
 ```
@@ -217,7 +217,7 @@ Explanation: This query adds a new record to the Products table with the specifi
 
 - Place a new order for a user (e.g., ```user_id = 2```).
 This is a multi-step process, ideally handled within a transaction in an application.
-```
+```sql
 -- Step 1: Create the order
 INSERT INTO Orders (user_id, order_status, shipping_address, total_amount)
 VALUES (2, 'pending', '101 New Street, Townsville, USA', 0.00); -- Initial total, will be updated
